@@ -1,0 +1,92 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>期末考</title>
+    <link href="https://could-victorzhj.c9users.io/20160623/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <script src="https://could-victorzhj.c9users.io/20160623/js/script.js" type="text/javascript"></script>
+    <script src="https://could-victorzhj.c9users.io/20160623/js/w3data.js" type="text/javascript"></script>
+    <script>
+        function handler(doc) {
+            //alert(doc.result);
+
+            if (doc.result == "ok") {
+                alert("發文成功");
+                window.location.href = "https://could-victorzhj.c9users.io/20160623/post/allpost.html"; // 將網頁重導向至 login.html
+            }
+            else {
+                alert("發文失敗");
+
+                document.getElementById("title").value = "";
+                document.getElementById("content").value = "";
+                document.getElementById("title").focus();
+            }
+        }
+
+        function sendData() {
+
+            var xmlhttp = new XMLHttpRequest();
+
+            //userid | pass | username  | age  | phone  
+
+            var title = document.getElementById("title").value;
+            var content = document.getElementById("content").value;
+            var url = "postDo.php";
+            var postData = "title=" + title + "&content=" + content;
+
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var doc = JSON.parse(xmlhttp.responseText);
+                    //alert(xmlhttp.responseText);
+                    handler(doc);
+                }
+            };
+
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send(postData);
+
+        }
+    </script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body onload="loadUserInfo(); loadPostContent();">
+    <div w3-include-html="https://could-victorzhj.c9users.io/20160623/navbar.html"></div>
+    <div class="jumbotron">
+        <div class="col-md-8 col-md-offset-2">
+            <h1>發文</h1>
+            <table>
+                <tr>
+                    <td>標題：</td>
+                    <td><input name='title' id='title' style="width:1000px" /></td>
+                </tr>
+                <tr>
+                    <tr>
+                        <td style="vertical-align: text-top;">內文：</td>
+                        <td><textarea name="content" id="content" style="left:0px;right:0px; height:500px; width:1000px; vertical-align: text-top;"></textarea></td>
+                    </tr>
+
+            </table>
+            <br>
+            <a class="btn btn-success btn-block btn-lg" onclick="sendData()">送出</a>
+            <br><br>
+        </div>
+    </div>
+    <script src="https://could-victorzhj.c9users.io/20160623/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="https://could-victorzhj.c9users.io/20160623/js/bootstrap.js" type="text/javascript"></script>
+    <script>
+        w3IncludeHTML();
+    </script>
+</body>
+
+</html>

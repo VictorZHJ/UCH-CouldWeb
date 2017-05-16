@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>性別判斷</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+
+$("#submit").click(function(){
+    
+    var url = "name.php?a=" + $("#a").val()  + "&b=" + $("#b").val();
+    console.log(url);
+    
+    $.get(url, function(name, gender){
+        console.log("姓名: " + name + "\n性別: " + gender);
+        
+        //alert("相加的結果為：" + data);
+        $("#result").html(name);
+    });
+});    
+    
+</script>
+
+
+</head>
+
+<body>
+
+<p>請輸入以下資料：</p>
+
+<input type="text" id="a" name="a" placeholder="請輸入姓名"><br>
+<input type="text" id="b" name="b" placeholder="男生 or 女生"><br>
+<span id="result"></span>
+<br/>
+<button id="submit" >送出</button>
+
+<script>
+
+$("#submit").click(function(){
+    
+    var url = "name.php?a=" + $("#a").val()  + "&b=" + $("#b").val();
+    console.log(url);
+    
+    $.get(url, function(name, gender){
+        console.log("姓名: " + name + "\n性別: " + gender);
+        
+        //alert("相加的結果為：" + data);
+        $("#result").html(name);
+    });
+});    
+    
+</script>
+
+</body>
+</html>
+

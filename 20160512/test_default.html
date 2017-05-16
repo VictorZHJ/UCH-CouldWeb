@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<script>
+
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        document.getElementById("username").innerHTML = doc.data.uname;
+    }else {
+        alert("尚未登入");        
+        window.location.href = "test_login.html";  // 將網頁重導向至 test_login.html
+        
+    }
+}
+
+function loadUserInfo(){
+    var xmlhttp = new XMLHttpRequest();
+
+    var url = "test_getUserInfo.php";
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+
+//--------------------------------------------------------
+// logout
+//--------------------------------------------------------
+function logoutHandler(doc) {
+    //alert(doc.result);
+    alert("已登出!!!");        
+    window.location.href = "test_login.html";  // 將網頁重導向至 test_login.html
+}
+
+function logout(){
+    var xmlhttp = new XMLHttpRequest();
+
+    var url = "test_logout.php";
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            logoutHandler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}  
+</script>
+
+<style>
+
+.menuItem:hover{
+    color:red;    
+}    
+    
+</style>
+
+</head>
+
+<body onload = "loadUserInfo()">
+
+<span id="username"></span>，歡迎您!!<br>
+
+
+<button style="position:fixed;right:30px;top:10px" onclick="logout()">登出</button>
+
+<p class="menuItem" onclick = "window.location.href='changePass.html'">修改密碼</p>
+<p class="menuItem" onclick = "window.location.href='addMember.html'">新增會員</p>
+<p class="menuItem" onclick = "window.location.href='changeRegisterData.html'">修改會員資料</p>
+
+</body>
+</html>

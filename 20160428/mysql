@@ -1,0 +1,17 @@
+CREATE TABLE member
+(
+uid int NOT NULL AUTO_INCREMENT,
+user varchar(64) NOT NULL,
+pwd varchar(32),
+name varchar(64),
+nickname varchar(64),
+email varchar(64),
+PRIMARY KEY (uid)
+)
+
+
+INSERT INTO 'member' (`user`, `pwd`, `name`, `nickname`, `email`) VALUES ([value-2],[value-3],[value-4],[value-5],[value-6])
+
+UPDATE `member` SET `uid`=[value-1],`user`=[value-2],`pwd`=[value-3],`name`=[value-4],`nickname`=[value-5],`email`=[value-6] WHERE 1
+
+SELECT `uid`, `user`, `pwd`, `name`, `nickname`, `email` FROM `member` WHERE 1

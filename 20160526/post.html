@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script>
+
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        alert("發文成功");
+        window.location.href = "default.html";  // 將網頁重導向至 login.html
+    }else {
+        alert("發文失敗");        
+        
+        document.getElementById("title").value ="";
+        document.getElementById("content").value ="";
+        document.getElementById("title").focus();
+    }
+}
+
+function sendData(){
+    
+    var xmlhttp = new XMLHttpRequest();
+
+//userid | pass | username  | age  | phone  
+
+    var title = document.getElementById("title").value;
+    var content = document.getElementById("content").value;
+    var url = "postDo.php" ;
+    var postData = "title=" + title + "&content=" + content;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+
+    xmlhttp.open("POST", url, true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(postData);    
+    
+}   
+</script>
+
+</head>
+
+<body onload= 'document.getElementById("title").focus()'>
+    
+    <h1>發文</h1>
+    
+<!--<form action="20160331_loginverify.php" method="post"></form>-->
+
+<!--userid | pass | username  | age  | phone  -->
+<p><button onclick="sendData()">送出</button> </p>
+
+<button style="position:fixed; right:15px;top:30px;" onclick="window.location.href='default.html'">回首頁</button> 
+
+<table>
+    <tr>
+        <td>標題：</td>
+        <td><input name='title' id='title' style="width:1000px"/></td>
+    </tr>
+    <tr>
+    <tr>
+        <td style="vertical-align: text-top;">內文：</td>
+        <td><textarea name="content"  id="content" style="left:0px;right:0px; height:500px; width:1000px; vertical-align: text-top;" ></textarea></td>
+    </tr>
+
+</table>
+
+<p><button onclick="sendData()">送出</button> </p>
+<!--</form>-->
+
+
+</body>
+</html>

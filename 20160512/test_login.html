@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script>
+
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        alert("登入成功");
+        window.location.href = "test_default.html";  // 將網頁重導向至 test_default.html
+    }else {
+        alert("登入失敗");        
+        
+        document.getElementById("pass").value ="";
+        document.getElementById("pass").focus();
+    }
+}
+
+function verifyLogin(){
+    var xmlhttp = new XMLHttpRequest();
+    var uid = document.getElementById("userid").value;
+    var upass = document.getElementById("pass").value;
+    var url = "test_loginverify.php?userid=" + userid + "&pass=" + pass;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+</script>
+
+</head>
+
+<body onload= 'document.getElementById("uid").focus()'>
+
+    <h1>管理者介面</h1>    
+<!--<form action="test_20160331_loginverify.php" method="post"></form>-->
+    <p>帳號：<input name='uid' id='userid'></input></p>
+    <p>密碼：<input type="password" name='pass' id="pass"></input></p>
+    <p><button onclick="verifyLogin()">登入</button> </p>
+<!--</form>-->
+
+
+</body>
+</html>

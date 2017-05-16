@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script>
+
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        alert("登入成功");
+        window.location.href = "default.html";  // 將網頁重導向至 test_default.html
+    }else {
+        alert("登入失敗");        
+        
+        document.getElementById("upass").value ="";
+        document.getElementById("upass").focus();
+    }
+}
+
+function verifyLogin(){
+    var xmlhttp = new XMLHttpRequest();
+    var uid = document.getElementById("uid").value;
+    var upass = document.getElementById("upass").value;
+    var url = "loginverify.php?uid=" + uid + "&upass=" + upass;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+</script>
+
+</head>
+
+<body onload= 'document.getElementById("uid").focus()'>
+    
+<!--<form action="test_20160331_loginverify.php" method="post"></form>-->
+    <p>帳號：<input name='uid' id='uid'></input></p>
+    <p>密碼：<input type="password" name='upass' id="upass"></input></p>
+    <p><button onclick="verifyLogin()">登入</button> <button onclick="window.location.href='regiester.html'">註冊會員</button></p>
+<!--</form>-->
+
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+ALTER TABLE users ADD age int;
+
+ALTER TABLE users ADD phone nvarchar(20);
+
+
+insert into users (userid, pass, username, age, phone) values ('userid', 'pass', 'username', age, 'phone') 
+
+update users set pass='pass' where userid = 'userid' and pass='pass'
+
+
+update users set username='$uname', age=$age, phone='$phone' where userid = '$uid'
+
+update users set username='游棟翔', age=18, phone='0911123456' where userid = 'tkli3'
+
+
+
+create table post (
+    pno int AUTO_INCREMENT,
+    userid nvarchar(50),
+    time datetime,
+    title text,
+    content text,
+    replyTo int,
+    
+    primary key (pno)
+)
+
+
+insert into post (userid, time, title, content, replyTo) values ('tkli', now(), '測試', '測試測試測試測試測試', 0)

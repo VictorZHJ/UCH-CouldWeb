@@ -1,0 +1,41 @@
+<tkli>
+test
+this is a book
+test teste
+
+<ttlu>
+hi
+hi
+<[object HTMLInputElement]>
+this is test
+
+<[object HTMLInputElement]>
+this is test
+
+<[object HTMLInputElement]>
+測試
+
+<ttlu>
+你好嗎
+
+
+你好嗎
+
+<>
+你好嗎
+
+<>
+測試
+
+<tkli>
+測試
+
+<ttlu>
+this is a book
+
+<123>
+222
+
+<123>
+22232132154351
+

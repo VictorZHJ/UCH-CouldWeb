@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script>
+
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        alert("修改成功");
+        window.location.href = "default.html";  // 將網頁重導向至 default.html
+    }else {
+        alert("修改失敗");        
+        
+        document.getElementById("old_pass").value ="";
+        document.getElementById("new_pass").value ="";
+        document.getElementById("re_upass").value ="";
+        
+        document.getElementById("old_pass").focus();
+    }
+}
+
+function sendData(){
+    
+    if ( document.getElementById("new_pass").value !== document.getElementById("re_upass").value){
+        alert("密碼有問題!!!");        
+        document.getElementById("new_pass").value ="";
+        document.getElementById("re_upass").value ="";
+        document.getElementById("new_pass").focus();
+        
+        return;
+    }
+    
+    var xmlhttp = new XMLHttpRequest();
+
+//userid | pass | username  | age  | phone  
+
+    var old_pass = document.getElementById("old_pass").value;
+    var new_pass = document.getElementById("new_pass").value;
+    var url = "changePassDo.php?old_pass=" + old_pass + "&new_pass=" + new_pass;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+</script>
+
+</head>
+
+<body onload= 'document.getElementById("old_pass").focus()'>
+    
+    <h1>修改密碼</h1>
+    
+<!--<form action="20160331_loginverify.php" method="post"></form>-->
+
+<!--userid | pass | username  | age  | phone  -->
+
+<table>
+    <tr>
+        <td>舊密碼：</td>
+        <td><input type="password" name='old_pass' id="old_pass"></input></td>
+    </tr>
+    <tr>
+        <td>新密碼：</td>
+        <td><input type="password" name='new_pass' id="new_pass"></input></td>
+    </tr>
+    <tr>
+        <td>重覆密碼：</td>
+        <td><input type="password" name='re_upass' id="re_upass"></input></td>
+    </tr>
+</table>
+
+    <p><button onclick="sendData()">確認變更</button> </p>
+<!--</form>-->
+
+
+</body>
+</html>

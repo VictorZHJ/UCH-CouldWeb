@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script>
+
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        alert("修改成功");
+        window.location.href = "test_default.html";  // 將網頁重導向至 test_default.html
+    }else {
+        alert("修改失敗");        
+        
+        document.getElementById("uname").value ="";
+        document.getElementById("age").value ="";
+        document.getElementById("phone").value ="";
+        
+        document.getElementById("uname").focus();
+    }
+}
+
+function sendData(){
+    
+    var xmlhttp = new XMLHttpRequest();
+
+//userid | pass | username  | age  | phone  
+
+    var uid = document.getElementById("uid").value;
+    var upass = document.getElementById("upass").value;
+    var uname = document.getElementById("uname").value;
+    var age = document.getElementById("age").value;
+    var phone = document.getElementById("phone").value;
+    var url = "changeRegisterDataDo.php?uname=" + uname + "&uid=" + uid + "&upass=" + upass + "&age=" + age + "&phone=" + phone;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log(xmlhttp.responseText);
+            var doc = JSON.parse(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+</script>
+
+</head>
+
+<body onload= 'document.getElementById("uname").focus()'>
+    
+    <h1>修改會員資料</h1>
+    
+<!--<form action="test_20160331_loginverify.php" method="post"></form>-->
+
+<!--userid | pass | username  | age  | phone  -->
+
+<table>
+    <tr>
+        <td>帳號：</td>
+        <td><input name='uid' id='uid'></input></td>
+    </tr>
+    <tr>
+        <td>密碼：</td>
+        <td><input name='upass' id='upass'></input></td>
+    </tr>
+    <tr>
+        <td>姓名：</td>
+        <td><input name='uname' id='uname'></input></td>
+    </tr>
+    <tr>
+        <td>年齡：</td>
+        <td><input name='age' id='age'></input></td>
+    </tr>
+    <tr>
+        <td>電話：</td>
+        <td><input name='phone' id='phone'></input></td>
+    </tr>
+</table>
+
+    <p><button onclick="sendData()">確認變更</button> </p>
+<!--</form>-->
+
+
+</body>
+</html>

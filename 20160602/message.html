@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<script>
+
+//--------------------------------------------------------
+// 載入使用者資料
+//--------------------------------------------------------
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        document.getElementById("username").innerHTML = doc.data.uname;
+    }else {
+        alert("尚未登入");        
+        window.location.href = "login.html";  // 將網頁重導向至 test_login.html
+        
+    }
+}
+
+function loadUserInfo(){
+    var xmlhttp = new XMLHttpRequest();
+
+    var url = "getUserInfo.php";
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+
+//--------------------------------------------------------
+// 開始聊天
+//--------------------------------------------------------
+function openMessage(){
+
+    if(typeof(EventSource) !== "undefined") {
+        var receiver = document.getElementById("receiverId");
+        var source = new EventSource("openMessage.php?receiver=" + receiver);
+        
+        source.onmessage = function(event) {
+            document.getElementById("messageContent").innerHTML = event.data + "\n";
+        };
+    } else {
+        document.getElementById("messageContent").innerHTML = "Sorry, your browser does not support server-sent events...";
+    }
+
+    
+}   
+
+//--------------------------------------------------------
+// 送出訊息
+//--------------------------------------------------------
+function sendMessageHandler(doc) {
+    //alert(doc.result);
+    
+    // if (doc.result == "ok"){
+    //     document.getElementById("username").innerHTML = doc.data.uname;
+    // }else {
+    //     alert("尚未登入");        
+    //     window.location.href = "login.html";  // 將網頁重導向至 test_login.html
+        
+    // }
+
+    
+}
+
+function sendMessage(){
+    var xmlhttp = new XMLHttpRequest();
+
+    var messageBeSent = document.getElementById("messageBeSent").value;
+    var receiver = document.getElementById("receiverId").value;
+    var url = "sendMessage.php?messageBeSent=" + messageBeSent + "&receiver=" + receiver;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            sendMessageHandler(doc);
+        }
+    };
+    
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+
+</script>
+
+<style>
+
+.menuItem:hover{
+    color:red;    
+}    
+    
+</style>
+
+</head>
+
+<body onload = "loadUserInfo(); ">
+
+<div style="position:fixed; left:0px;right:0px;top:0px; height:58px;padding:10px;background-color:rgb(255,190,210)">
+    <div style="position:fixed;right:30px;top:10px">
+        <span id="username"></span>
+        <button  onclick="logout()">登出</button>
+    </div>
+    
+    <div>
+        請輸入對方帳號：<input type="text" id="receiverId" class="menuItem" />
+        <button class="menuItem" onclick = "openMessage()">開始聊天</button>
+    </div>
+    <hr>
+    <div >
+        訊息內容：<input type="text" id="messageBeSent" class="menuItem" style="width:500px" />
+        <button class="menuItem" onclick = "sendMessage()">送出訊息</button>
+    </div>
+</div>
+
+<textarea id="messageContent" style="position:fixed; left:0px;right:0px; top:80px; bottom:0px;height:600px;width:1200px" disabled>
+    
+</textarea>
+
+
+</body>
+</html>

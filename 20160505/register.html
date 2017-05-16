@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script>
+
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        alert("註冊成功");
+        window.location.href = "login.html";  // 將網頁重導向至 login.html
+    }else {
+        alert("註冊失敗");        
+        
+        document.getElementById("upass").value ="";
+        document.getElementById("re_upass").value ="";
+        document.getElementById("upass").focus();
+    }
+}
+
+function sendData(){
+    
+    if ( document.getElementById("upass").value !== document.getElementById("re_upass").value){
+        alert("密碼有問題!!!");        
+        document.getElementById("upass").value ="";
+        document.getElementById("re_upass").value ="";
+        document.getElementById("upass").focus();
+        
+        return;
+    }
+    
+    var xmlhttp = new XMLHttpRequest();
+
+    //userid | pass | username  | age  | phone  
+
+    var uid = document.getElementById("uid").value;
+    var upass = document.getElementById("upass").value;
+    var uname = document.getElementById("uname").value;
+    var age = document.getElementById("age").value;
+    var phone = document.getElementById("phone").value;
+    var url = "test_register.php?uid=" + uid + "&upass=" + upass + "&uname=" + uname + "&age=" + age + "&phone=" + phone;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+</script>
+
+</head>
+
+<body onload= 'document.getElementById("uid").focus()'>
+    
+    <h1>註冊會員</h1>
+    
+<!--<form action="test_20160331_loginverify.php" method="post"></form>-->
+
+<!--userid | pass | username  | age  | phone  -->
+
+<table>
+    <tr>
+        <td>帳號：</td>
+        <td><input name='uid' id='uid'></input></td>
+    </tr>
+    <tr>
+        <td>密碼：</td>
+        <td><input type="password" name='upass' id="upass"></input></td>
+    </tr>
+    <tr>
+        <td>重覆密碼：</td>
+        <td><input type="password" name='re_upass' id="re_upass"></input></td>
+    </tr>
+    <tr>
+        <td>姓名：</td>
+        <td><input name='uname' id='uname'></input></td>
+    </tr>
+    <tr>
+        <td>年齡：</td>
+        <td><input name='age' id='age'></input></td>
+    </tr>
+    <tr>
+        <td>電話：</td>
+        <td><input name='phone' id='phone'></input></td>
+    </tr>
+    
+    
+</table>
+
+    <p><button onclick="sendData()">註冊</button> </p>
+<!--</form>-->
+
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script>
+
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        alert("修改成功");
+        window.location.href = "default.html";  // 將網頁重導向至 default.html
+    }else {
+        alert("修改失敗");        
+        
+        document.getElementById("uname").value ="";
+        document.getElementById("age").value ="";
+        document.getElementById("phone").value ="";
+        
+        document.getElementById("uname").focus();
+    }
+}
+
+function sendData(){
+    
+    var xmlhttp = new XMLHttpRequest();
+
+//userid | pass | username  | age  | phone  
+
+    var uname = document.getElementById("uname").value;
+    var age = document.getElementById("age").value;
+    var phone = document.getElementById("phone").value;
+    var url = "changeRegisterDataDo.php?uname=" + uname + "&age=" + age + "&phone=" + phone;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+</script>
+
+</head>
+
+<body onload= 'document.getElementById("uname").focus()'>
+    
+    <h1>修改會員資料</h1>
+    
+<!--<form action="20160331_loginverify.php" method="post"></form>-->
+
+<!--userid | pass | username  | age  | phone  -->
+
+<table>
+    <tr>
+        <td>姓名：</td>
+        <td><input name='uname' id='uname'></input></td>
+    </tr>
+    <tr>
+        <td>年齡：</td>
+        <td><input name='age' id='age'></input></td>
+    </tr>
+    <tr>
+        <td>電話：</td>
+        <td><input name='phone' id='phone'></input></td>
+    </tr>
+</table>
+
+    <p><button onclick="sendData()">確認變更</button> </p>
+<!--</form>-->
+
+
+</body>
+</html>

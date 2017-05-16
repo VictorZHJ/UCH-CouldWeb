@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+
+<script>
+var replyTo=0;
+
+//--------------------------------------------------------
+// 載入使用者資料
+//--------------------------------------------------------
+function handler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        var postListContainer = document.getElementById("postList");
+        document.getElementById("author").innerHTML = doc.data[0].username;
+        document.getElementById("time").innerHTML = doc.data[0].time;
+        document.getElementById("title").value = doc.data[0].title;
+        document.getElementById("content").value = doc.data[0].content;
+        replyTo =  doc.data[0].pno;
+        
+        loadReplyList();    // 等 本文載入後，再呼叫 載入 回文的部份
+    }else {
+        alert("尚未登入");        
+        window.location.href = "login.html";  // 將網頁重導向至 test_login.html
+    }
+}
+
+function loadPostContent(){   //將 PO 文的內容載入進來，並顯示
+    var xmlhttp = new XMLHttpRequest();
+
+    var queryString = window.location.search;
+    //alert(queryString);
+    //return;
+
+    var url = "getOnePost.php" + queryString;  // queryString ==> ?pno=XXX
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handler(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+
+
+//--------------------------------------------------------
+// 回文
+//--------------------------------------------------------
+function sendReplyHandler(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        alert("發文成功");
+        window.location.href = "default.html";  // 將網頁重導向至 login.html
+    }else {
+        alert("發文失敗");        
+        
+        document.getElementById("title").value ="";
+        document.getElementById("content").value ="";
+        document.getElementById("title").focus();
+    }
+}
+
+function sendReply(){
+    
+    var xmlhttp = new XMLHttpRequest();
+
+//userid | pass | username  | age  | phone  
+
+    var title = document.getElementById("title").value;
+    var content = document.getElementById("replyContent").value;     //這邊要 丟回給伺服端的是 回文 replyContent
+    var url = "replyDo.php" ;
+    var postData = "content=" + content +"&replyTo=" + replyTo;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            sendReplyHandler(doc);
+        }
+    };
+
+    xmlhttp.open("POST", url, true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(postData);    
+    
+} 
+
+
+//--------------------------------------------------------
+// 載入回文內容
+//--------------------------------------------------------
+function handlerReplyList(doc) {
+    //alert(doc.result);
+    
+    if (doc.result == "ok"){
+        var replyList = "";
+        for (var i=0; i<doc.data.length; i++){
+            replyList += "作者：" + doc.data[i].username + "<br/>";
+            replyList += "回覆時間：" + doc.data[i].time + "<br/>";
+            replyList += "回覆內容：" + doc.data[i].content +"<br/><br/>\n";
+            
+        }
+        
+        document.getElementById("replyList").innerHTML = replyList;
+    }else {
+        alert("尚未登入");        
+        window.location.href = "login.html";  // 將網頁重導向至 test_login.html
+        
+    }
+}
+
+function loadReplyList(){
+    var xmlhttp = new XMLHttpRequest();
+
+    var url = "getReplyList.php?replyTo=" + replyTo;
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var doc = JSON.parse(xmlhttp.responseText);
+            //alert(xmlhttp.responseText);
+            handlerReplyList(doc);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    
+    
+}   
+
+</script>
+
+</head>
+
+<body onload= 'loadPostContent();'>
+    
+    <!--<h1>發文</h1>-->
+    
+<!--<form action="20160331_loginverify.php" method="post"></form>-->
+
+<!--userid | pass | username  | age  | phone  -->
+<!--<p><button onclick="sendData()">送出</button> </p>-->
+
+<button style="position:fixed; right:15px;top:30px;" onclick="window.location.href='default.html'">回首頁</button> 
+
+<table>
+    <tr>
+        <td>作者：</td>
+        <td><span id="author"></span></td>
+    </tr>
+    <tr>
+        <td>發文時間：</td>
+        <td><span id="time"></span></td>
+    </tr>
+    <tr>
+        <td>標題：</td>
+        <td><input name='title' id='title' style="width:1000px" readonly /></td>
+    </tr>
+    <tr>
+    <tr>
+        <td style="vertical-align: text-top;">內文：</td>
+        <td><textarea name="content"  id="content" style="left:0px;right:0px; height:400px; width:1000px; vertical-align: text-top;" readonly ></textarea></td>
+    </tr>
+
+</table>
+
+<table>
+    <tr>
+        <td style="vertical-align: text-top;">回覆：</td>
+        <td><textarea name="replyContent"  id="replyContent" style="left:0px;right:0px; height:200px; width:1000px; vertical-align: text-top;" ></textarea></td>
+        
+    </tr>
+    
+</table>
+<p><button onclick="sendReply()">確認回覆</button> </p>
+
+<hr/>
+
+<h2>回覆內容：</h2>
+<div id="replyList"></div>
+
+<!--<p><button onclick="sendData()">送出</button> </p>-->
+<!--</form>-->
+
+
+</body>
+</html>
